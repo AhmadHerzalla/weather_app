@@ -1,12 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:weather_app/screens/location_screen.dart';
 import 'package:weather_app/services/weather.dart';
-
-
-
-
-
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
@@ -16,30 +10,32 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class LoadingScreenState extends State<LoadingScreen> {
-  
+  void getWeatherData() async {
+    WeatherModel weather = WeatherModel();
+    await weather.getCurrentLocationWeather();
 
-  
+    if (mounted) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return LocationScreen(weatharData: weather);
+      }));
+    }
+  }
 
-void getWeatherData()async{
- WeatherModel weather=WeatherModel();
- await weather.getCurrentLocationWeather();
-
-  if (mounted){
-Navigator.push(context, MaterialPageRoute(builder: (context){
-  return LocationScreen(weatharData: weather);
-}));}
-}
   @override
   void initState() {
-   getWeatherData();
+    getWeatherData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
+    return Scaffold(
+      body: Container(
+        height: double.infinity,
+        child: Image.asset(
+          "images/weather_animated.gif",
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

@@ -1,20 +1,20 @@
+//import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 class Location {
   late double lat;
   late double long;
-  
 
-    Future <void> getCurrentLocation() async {
+  Future<void> getCurrentLocation() async {
     try {
       Position position = await getLocation();
-      lat=position.latitude;
-      long=position.longitude;
-      
+      lat = position.latitude;
+      long = position.longitude;
     } catch (e) {
       print(e);
     }
   }
+
   Future<Position> getLocation() async {
     bool serviceEnabled;
     LocationPermission permission;

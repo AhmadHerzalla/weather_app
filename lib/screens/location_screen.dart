@@ -7,67 +7,62 @@ import '../services/weather.dart';
 import '../utilities/constants.dart';
 
 class LocationScreen extends StatefulWidget {
-  final WeatherModel weatharData ;
-   const LocationScreen({super.key, required this.weatharData});
+  final WeatherModel weatharData;
+  const LocationScreen({super.key, required this.weatharData});
 
   @override
   LocationScreenState createState() => LocationScreenState();
 }
 
 class LocationScreenState extends State<LocationScreen> {
-  
-  void backToGaza()async{
-  WeatherModel back=WeatherModel();
-  await back.getCurrentLocationWeather();
- setState(() {
-    temp=back.temp;
-   descrebtion = back.getMessage();
-   cityName =back.name;
-   icon = back.getWeatherIcon();
+  void backToGaza() async {
+    WeatherModel back = WeatherModel();
+    await back.getCurrentLocationWeather();
+    setState(() {
+      temp = back.temp;
+      descrebtion = back.getMessage();
+      cityName = back.name;
+      icon = back.getWeatherIcon();
+    });
+  }
 
- });
-}
   late double temp;
   late String cityName;
   late String icon;
   late String descrebtion;
 
- final ImageProvider _image=const AssetImage('images/location_background.jpg') ;
- final ImageProvider _networkImage=const NetworkImage(
-  'https://source.unsplash.com/random/?nature,day') ;
-bool isloaded=false;
+  final ImageProvider _image =
+      const AssetImage('images/location_background.jpg');
+  final ImageProvider _networkImage =
+      const NetworkImage('https://source.unsplash.com/random/?nature,day');
+  bool isloaded = false;
 
-void updateUi(){
-  temp=widget.weatharData.temp;
-cityName=widget.weatharData.name;
-icon=widget.weatharData.getWeatherIcon();
-descrebtion=widget.weatharData.getMessage();
+  void updateUi() {
+    temp = widget.weatharData.temp;
+    cityName = widget.weatharData.name;
+    icon = widget.weatharData.getWeatherIcon();
+    descrebtion = widget.weatharData.getMessage();
+  }
 
-}
-
-void getImageProvider(){
-  _networkImage.resolve(ImageConfiguration())
-  .addListener(ImageStreamListener((image, synchronousCall) { 
-    setState(() {
-      
-      isloaded=true;
-    });
-  }));
-
-}
- 
+  void getImageProvider() {
+    _networkImage
+        .resolve(const ImageConfiguration())
+        .addListener(ImageStreamListener((image, synchronousCall) {
+      setState(() {
+        isloaded = true;
+      });
+    }));
+  }
 
   @override
-initState(){
-  
-updateUi();
-  super.initState();
-  getImageProvider();
+  initState() {
+    updateUi();
+    super.initState();
+    getImageProvider();
+  }
 
-}
   @override
   Widget build(BuildContext context) {
-  
     //print(widget.weatharData);
     return Scaffold(
       body: Stack(
@@ -76,7 +71,7 @@ updateUi();
             decoration: BoxDecoration(
               image: DecorationImage(
                 // image: AssetImage('images/location_background.jpg'),
-                image: !isloaded?_image:_networkImage,
+                image: !isloaded ? _image : _networkImage,
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
                     Colors.white.withOpacity(0.8), BlendMode.dstATop),
@@ -106,10 +101,8 @@ updateUi();
                   children: <Widget>[
                     TextButton(
                       onPressed: () {
-
 //Navigator.push(context, MaterialPageRoute(builder:(context) => LoadingScreen(),));
-  backToGaza();
-
+                        backToGaza();
                       },
                       child: const Icon(
                         Icons.near_me,
@@ -119,7 +112,11 @@ updateUi();
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const CityScreen(),));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CityScreen(),
+                            ));
                       },
                       child: const Icon(
                         Icons.location_city,
@@ -131,17 +128,20 @@ updateUi();
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 24.0,top: 128),
+                padding: const EdgeInsets.only(left: 24.0, top: 32),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(icon),
+                    Text(
+                      icon,
+                      style: TextStyle(fontSize: 60),
+                    ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.alphabetic,
                       children: [
-                         Text(
-                         "${temp.toInt()}",
+                        Text(
+                          "${temp.toInt()}",
                           style: kTempTextStyle,
                         ),
                         Column(
@@ -183,7 +183,7 @@ updateUi();
                   ],
                 ),
               ),
-               Padding(
+              Padding(
                 padding: const EdgeInsets.only(right: 24.0),
                 child: Text(
                   descrebtion,
@@ -191,26 +191,14 @@ updateUi();
                   style: kMessageTextStyle,
                 ),
               ),
-                Padding(
-                padding: const EdgeInsets.only(right: 24.0,top: 24),
+              Padding(
+                padding: const EdgeInsets.only(right: 24.0, top: 24),
                 child: Text(
                   cityName,
                   textAlign: TextAlign.right,
                   style: kButtonTextStyle,
                 ),
               ),
-              // ClipRRect(
-              //   child: BackdropFilter(
-              //     filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-              //     child: Container(
-              //       padding: EdgeInsets.all(34),
-              //       decoration: BoxDecoration(
-              //         color: Colors.white.withOpacity(0.1),
-              //       ),
-              //       child: Text('fffffmmmmmmm'),
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ],
